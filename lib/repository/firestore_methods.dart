@@ -62,6 +62,62 @@ class FirestoreMethods {
     return res;
   }
 
+
+  Future<String> updateAd(
+      String title,
+      String type,
+      String price,
+      String area,
+      String city,
+      String desc,
+      String purpose,
+      Uint8List? file,
+      String address,
+      ad,
+      ) async {
+    String res = "Some error occurred";
+    try {
+      String adImageUrl = ad["adImageUrl"];
+      if(file!=null){
+        adImageUrl =
+        await StorageMethods().uploadImageToStorage('ads', file, true);
+      }
+
+
+      //Dealing will add that doesn't have reported field
+      String adId = ad['adId'];
+      bool isRep=false;
+      String resRep='';
+      if(ad['isReported']!=null){
+        isRep=ad['isReported'];
+        resRep=ad['reportReason'];
+      }
+
+      AdModel updatedAd = AdModel(
+          title: title,
+          uid: ad['uid'],
+          adId: adId,
+          username: ad['username'],
+          adImageUrl: adImageUrl,
+          resOrComm: type,
+          area: area,
+          city: city,
+          price: price,
+          description: desc,
+          datePublished: DateTime.now(),
+          purpose: purpose,
+          address: address,
+          isReported: isRep, reportReason: resRep);
+      _firestore.collection('ads').doc(adId).update(updatedAd.toJson());
+      print(updatedAd.toJson());
+
+      res = "success";
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
   Future<String> reportAd(
     String adId,
     String reason,
@@ -114,6 +170,60 @@ class FirestoreMethods {
       print(repAd.toJson());
 
       res = "Ad reported succesfully";
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
+  Future<String> unReportAd(
+      String adId,
+      ) async {
+    String res = "Some error occurred";
+    try {
+      AdModel adModel = AdModel(
+          title: '',
+          uid: '',
+          adId: adId,
+          username: '',
+          datePublished: '',
+          adImageUrl: '',
+          resOrComm: '',
+          area: '',
+          city: '',
+          price: '',
+          description: '',
+          purpose: '',
+          address: '',
+          isReported: false,
+          reportReason: '');
+      await FirebaseFirestore.instance
+          .collection("ads")
+          .doc(adId)
+          .get()
+          .then((value) {
+        adModel = AdModel.fromMap(value.data()!);
+      });
+
+      AdModel repAd = AdModel(
+          title: adModel.title,
+          uid: adModel.uid,
+          adId: adModel.adId,
+          username: adModel.username,
+          adImageUrl: adModel.adImageUrl,
+          resOrComm: adModel.resOrComm,
+          area: adModel.area,
+          city: adModel.city,
+          price: adModel.price,
+          description: adModel.description,
+          datePublished: adModel.datePublished,
+          purpose: adModel.purpose,
+          address: adModel.address,
+          isReported: false,
+          reportReason: '');
+      _firestore.collection('ads').doc(adId).update(repAd.toJson());
+
+      res = "Removed from reported";
     } catch (e) {
       res = e.toString();
     }

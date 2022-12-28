@@ -57,7 +57,7 @@ class AdModel {
       adId: map['adId'] ?? '',
       username: map['username'] ?? '',
       adImageUrl: map['adImageUrl'] ?? '',
-      resOrComm: map['resOrComm'] ?? "",
+      resOrComm: map['resOrCom'] ?? "",
       area: map['area'] ?? '',
       city: map['city'] ?? '',
       price: map['price'] ?? '',

@@ -4,11 +4,11 @@ import 'package:flutter_application_1/search_screen/search_screen.dart';
 import 'package:get/get.dart';
 
 const double kDefaultPadding =20.0;
-class AdminHeaderWithSearchBox extends StatefulWidget {
+class ReportedAdminHeaderWithSearchBox extends StatefulWidget {
 
   // TextEditingController store=TextEditingController();
 
-   AdminHeaderWithSearchBox({
+   ReportedAdminHeaderWithSearchBox({
     Key? key,
     required this.size,
   }) : super(key: key);
@@ -16,10 +16,10 @@ class AdminHeaderWithSearchBox extends StatefulWidget {
   final Size size;
 
   @override
-  State<AdminHeaderWithSearchBox> createState() => _AdminHeaderWithSearchBoxState();
+  State<ReportedAdminHeaderWithSearchBox> createState() => _ReportedAdminHeaderWithSearchBoxState();
 }
 
-class _AdminHeaderWithSearchBoxState extends State<AdminHeaderWithSearchBox> {
+class _ReportedAdminHeaderWithSearchBoxState extends State<ReportedAdminHeaderWithSearchBox> {
   final TextEditingController searchController = TextEditingController();
   bool isShowSearch = false;
   var store="area";
@@ -58,7 +58,7 @@ class _AdminHeaderWithSearchBoxState extends State<AdminHeaderWithSearchBox> {
   // }
   @override
   Widget build(BuildContext context) {
-    final SearchAdminController c = Get.find();
+    final SearchRepAdminController c = Get.find();
     return Container(
       margin: const EdgeInsets.only(bottom: kDefaultPadding),
       height: widget.size.height * 0.1,

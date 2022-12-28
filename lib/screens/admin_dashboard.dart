@@ -7,6 +7,7 @@ import 'package:flutter_application_1/all_ads_admin/admin_search_screen.dart';
 import 'package:flutter_application_1/model/user_model.dart';
 import 'package:flutter_application_1/my_files/map.dart';
 import 'package:flutter_application_1/my_files/scraping.dart';
+import 'package:flutter_application_1/reported_ads_admin/admin_Rep_search_screen.dart';
 import 'package:flutter_application_1/screens/addprop_screen.dart';
 import 'package:flutter_application_1/screens/c1.dart';
 import 'package:flutter_application_1/screens/drawer.dart';
@@ -40,7 +41,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   List<Map<String, dynamic>> topicsList = [
     {
-      'title': 'Property Ads',
+      'title': 'All Property Ads',
       'img': 'assets/property.png',
     },
     {
@@ -48,7 +49,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       'img': 'assets/users.png',
     },
     {
-      'title': 'Buyers & Sellers',
+      'title': 'Reported Property Ads',
       'img': 'assets/reported.png',
     },
   ];
@@ -60,8 +61,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminSearchProperty()));
       },
           () {
+
       },
           () {
+            Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminRepSearchProperty()));
       },
     ];
 
@@ -71,7 +74,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: MediaQuery.of(context).size.height * 0.33,
             decoration: const BoxDecoration(
               color: Colors.blueAccent,
               borderRadius: BorderRadius.only(
@@ -107,8 +110,86 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 40.h,
                 ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Total Ads',
+                          style:
+                          TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600),
+
+                        ),
+                        StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('ads')
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.blueAccent,
+                                ),
+                              );
+                            }
+                            return Text(snapshot.data!.docs.length.toString(),style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.sp,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w600),);
+                          },
+                        ),
+                      ],
+                    ),
+                    Container(height: 25.h,width: 2.w,color: Colors.white24,),
+                    Column(
+                      children: [
+                        Text(
+                          'Total Users',
+                          style:
+                          TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w600),
+
+                        ),
+                        StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection('users')
+                              .snapshots(),
+                          builder: (context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.blueAccent,
+                                ),
+                              );
+                            }
+                            return Text(snapshot.data!.docs.length.toString(),style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.sp,
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w600),);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
               ],
             ),
           ),

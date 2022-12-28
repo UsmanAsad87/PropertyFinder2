@@ -14,15 +14,15 @@ import 'package:geocoding/geocoding.dart';
 
 import '../model/user_model.dart';
 
-class SingleAdminPostScreen extends StatefulWidget {
+class SingleAdminReportedPostScreen extends StatefulWidget {
   final ad;
-  const SingleAdminPostScreen({Key? key, required this.ad}) : super(key: key);
+  const SingleAdminReportedPostScreen({Key? key, required this.ad}) : super(key: key);
 
   @override
-  State<SingleAdminPostScreen> createState() => _SingleAdminPostScreenState();
+  State<SingleAdminReportedPostScreen> createState() => _SingleAdminReportedPostScreenState();
 }
 
-class _SingleAdminPostScreenState extends State<SingleAdminPostScreen> {
+class _SingleAdminReportedPostScreenState extends State<SingleAdminReportedPostScreen> {
   bool loading = true;
   double imageHeight = 0;
   String sellerName = '';
@@ -51,24 +51,15 @@ class _SingleAdminPostScreenState extends State<SingleAdminPostScreen> {
     });
   }
 
-  void doReport(BuildContext context, String adId) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Color(0xFF252628),
-      useRootNavigator: true,
-      isScrollControlled: true,
-      isDismissible: true,
-      barrierColor: Colors.black45.withOpacity(0.8),
-      elevation: 10,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-        topRight: Radius.circular(20),
-        topLeft: Radius.circular(20),
-      )),
-      builder: (context) {
-        return ReportAdPage(adId: adId);
-      },
+  void doUnReport(BuildContext context, String adId) async {
+    String msg = await FirestoreMethods().unReportAd(adId);
+    Fluttertoast.showToast(
+        msg: msg, // message
+        toastLength: Toast.LENGTH_SHORT, // length
+        gravity: ToastGravity.BOTTOM_RIGHT // location
     );
+    Navigator.pop(context);
+    Navigator.pop(context);
     //Navigator.pop(context);
   }
 
@@ -144,6 +135,10 @@ class _SingleAdminPostScreenState extends State<SingleAdminPostScreen> {
               child: Column(
                 children: [
                   ListTile(
+                    title: Text('Reported reason'),
+                    subtitle: Text(widget.ad['reportReason'],style: TextStyle(color: Colors.red),),
+                  ),
+                  ListTile(
                     title: Text('Title'),
                     subtitle: Text(widget.ad['title']),
                   ),
@@ -164,6 +159,7 @@ class _SingleAdminPostScreenState extends State<SingleAdminPostScreen> {
                   Divider(
                     height: 2,
                   ),
+
                   ListTile(
                     title: Text('Area'),
                     subtitle: Text(widget.ad['area']),
@@ -334,11 +330,11 @@ class _SingleAdminPostScreenState extends State<SingleAdminPostScreen> {
                                       fontWeight: FontWeight.w900)),
                         ),
                         ListTile(
-                          onTap: () => doReport(context, widget.ad['adId']),
+                          onTap: () => doUnReport(context, widget.ad['adId']),
                           //tileColor: Colors.black12,
                           leading:
-                              const Icon(Icons.report, color: Colors.white),
-                          title: Text('Report Ad',
+                              const Icon(Icons.report_off, color: Colors.white),
+                          title: Text('Remove from Reported list',
                               style: Theme.of(context)
                                   .textTheme
                                   .headline2!

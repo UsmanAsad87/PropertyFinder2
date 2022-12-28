@@ -168,6 +168,13 @@ class _SinglePostScreenState extends State<SinglePostScreen> {
                     height: 2,
                   ),
                   ListTile(
+                    title: Text('Purpose'),
+                    subtitle: Text(widget.ad['purpose']),
+                  ),
+                  Divider(
+                    height: 2,
+                  ),
+                  ListTile(
                     title: Text('Description'),
                     subtitle: Text(widget.ad['description']),
                   ),

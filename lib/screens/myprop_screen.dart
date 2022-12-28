@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/all_ads_admin/components/admin_ad_tile.dart';
 import 'package:flutter_application_1/model/user_model.dart';
 import 'package:flutter_application_1/provider/user_provider.dart';
 import 'package:flutter_application_1/screens/registration_screen.dart';
@@ -95,7 +96,7 @@ class _mypropertyState extends State<myproperty> {
                       DocumentSnapshot snap =
                       (snapshot.data! as dynamic).docs[index];
 
-                      return  AdTile(
+                      return AdminAdTile(
                           snap: snap);
                     });
               },

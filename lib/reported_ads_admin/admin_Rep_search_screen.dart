@@ -1,18 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Getx/search_controller.dart';
+import 'package:flutter_application_1/all_ads_admin/components/Admin_header_with_searchbox.dart';
+import 'package:flutter_application_1/all_ads_admin/components/admin_ad_tile.dart';
 import 'package:flutter_application_1/my_files/practice.dart';
+import 'package:flutter_application_1/reported_ads_admin/components/Admin_rep_header_with_searchbox.dart';
 import 'package:flutter_application_1/screens/c1.dart';
-import 'package:flutter_application_1/search_screen/components/adtile.dart';
-import 'package:flutter_application_1/search_screen/components/header_with_searchbox.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../my_files/area.dart';
+import 'components/admin__rep_ad_tile.dart';
 
 const double kDefaultPadding = 20.0;
 
-class SearchProperty extends StatefulWidget {
+class AdminRepSearchProperty extends StatefulWidget {
   static const routeName = "/search";
   // final store;
 // final String cat;
@@ -20,10 +23,10 @@ class SearchProperty extends StatefulWidget {
   // const SearchProperty( this.cat);
 
   @override
-  State<SearchProperty> createState() => _SearchPropertyState();
+  State<AdminRepSearchProperty> createState() => _AdminRepSearchPropertyState();
 }
 
-class _SearchPropertyState extends State<SearchProperty> {
+class _AdminRepSearchPropertyState extends State<AdminRepSearchProperty> {
 // var sObj;
   var s = "city";
   var siz;
@@ -34,23 +37,22 @@ class _SearchPropertyState extends State<SearchProperty> {
   ];
 
   var store = "residential";
-  final searchController = Get.put(SearchController());
+  final searchRepAdminController = Get.put(SearchRepAdminController());
 
   void reset() {
     setState(() {
-      searchController.searchText = ''.obs;
+      searchRepAdminController.searchText = ''.obs;
     });
   }
 
   // _SearchPropertyState( this.store);
   @override
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     Size siz = MediaQuery.of(context).size;
     final data = ModalRoute.of(context)!.settings.arguments;
-    HeaderWithSearchBox sObj =
-        HeaderWithSearchBox(size: MediaQuery.of(context).size);
+    ReportedAdminHeaderWithSearchBox sObj =
+        ReportedAdminHeaderWithSearchBox(size: MediaQuery.of(context).size);
 
     //it will enable scrolling on small device
     return Scaffold(
@@ -59,100 +61,87 @@ class _SearchPropertyState extends State<SearchProperty> {
         backgroundColor: Colors.blueAccent,
         leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context, SearchProperty.routeName);
+              Navigator.pop(context, AdminRepSearchProperty.routeName);
               setState(() {
-                searchController.searchText = ''.obs;
+                searchRepAdminController.searchText = ''.obs;
               });
             },
             child: Icon(Icons.arrow_back)),
+        title: Text("Reported Ads"),
       ),
       body: Column(
         children: [
-          HeaderWithSearchBox(size: size),
-          searchController.searchText == ''
-              ? Expanded(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const TitleWithCustomUnderline(
-                            text: 'Property for Sell',
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 18.0),
-                            child: Container(
-                              child: DropdownButton(
-                                value: store,
-                                items: options.map((obj) {
-                                  return DropdownMenuItem(
-                                    child: Text(obj.toString()),
-                                    value: obj.toString().toLowerCase(),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    store = value.toString();
+          ReportedAdminHeaderWithSearchBox(size: size),
+          searchRepAdminController.searchText == ''?
+          Expanded(
+            child: FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('ads')
+                  .where('isReported',
+                  isEqualTo: true)
+                  .get(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                  snapshot) {
+                if (!snapshot.hasData) {
+                  print('no data');
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  print('waiting');
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
 
-                                    if (store == 'area') {
-                                      Navigator.pushNamed(
-                                          context, Area.routeName,
-                                          arguments: store);
-                                    } else {
-                                      Navigator.pushNamed(
-                                          context, Practice.routeName,
-                                          arguments: store);
-                                    }
-                                  });
-                                },
-                              ),
-                            ),
+                if (snapshot.data!.docs.isEmpty) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: SizedBox()),
+                        Center(child: const Text('No ads found')),
+                        Expanded(child: SizedBox()),
+                        TextButton(
+                          child: const Text(
+                            "See all Ads",
+                            style: TextStyle(fontSize: 12),
                           ),
-                        ],
-                      ),
-                      Expanded(
-                        child: StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('ads')
-                              .orderBy('datePublished', descending: true)
-                              .snapshots(),
-                          builder: (context,
-                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                                  snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.blueAccent,
-                                ),
-                              );
-                            }
-                            return GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 2 / 3),
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) => AdTile(
-                                snap: snapshot.data!.docs[index].data(),
-                              ),
-                            );
+                          onPressed: () {
+                            searchRepAdminController.searchText =
+                                RxString('');
+                            print(searchRepAdminController.searchText);
+                            setState(() {});
                           },
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              :
-              //Text(searchController.searchText.toString()),
+                        )
+                      ],
+                    ),
+                  );
+                } else {
+                  return GridView.builder(
+                    gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, childAspectRatio: 2 / 3),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) => AdminRepAdTile(
+                      snap: snapshot.data!.docs[index].data(),
+                    ),
+                  );
+                }
+              },
+            ),
+          ):
               Expanded(
                   child: FutureBuilder(
                     future: FirebaseFirestore.instance
-                        .collection('ads')
+                        .collection('ads').where('isReported',
+                        isEqualTo: true)
                         .where('title',
-                            // 'title',
-                            // searchController.searchText.toString(),
-                            isEqualTo: searchController.searchText
+                            isEqualTo: searchRepAdminController.searchText
                                 .toString()
                                 .trim()
                                 .toLowerCase())
@@ -189,8 +178,9 @@ class _SearchPropertyState extends State<SearchProperty> {
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 onPressed: () {
-                                  searchController.searchText = RxString('');
-                                  print(searchController.searchText);
+                                  searchRepAdminController.searchText =
+                                      RxString('');
+                                  print(searchRepAdminController.searchText);
                                   setState(() {});
                                 },
                               )
@@ -203,7 +193,7 @@ class _SearchPropertyState extends State<SearchProperty> {
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2, childAspectRatio: 2 / 3),
                           itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) => AdTile(
+                          itemBuilder: (context, index) => AdminRepAdTile(
                             snap: snapshot.data!.docs[index].data(),
                           ),
                         );
@@ -214,11 +204,6 @@ class _SearchPropertyState extends State<SearchProperty> {
           SizedBox(
             height: 20,
           ),
-          GestureDetector(
-              onTap: () {
-                reset();
-              },
-              child: Text("See all"))
         ],
       ),
     );
