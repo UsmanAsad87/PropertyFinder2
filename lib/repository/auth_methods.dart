@@ -56,24 +56,24 @@ class AuthMethods {
     return res;
   }
 
-  Future<String> updatePhone({
-    required String phone,
-  }) async {
-    String res = "Some error occurred";
-    try {
-
-      await _firestore
-          .collection('users')
-          .doc(_auth.currentUser!.uid)
-          .update({
-        'phone':phone,
-      });
-      res = 'success';
-    } catch (e) {
-      res = e.toString();
-    }
-    return res;
-  }
+  // Future<String> updatePhone({
+  //   required String phone,
+  // }) async {
+  //   String res = "Some error occurred";
+  //   try {
+  //
+  //     await _firestore
+  //         .collection('users')
+  //         .doc(_auth.currentUser!.uid)
+  //         .update({
+  //       'phone':phone,
+  //     });
+  //     res = 'success';
+  //   } catch (e) {
+  //     res = e.toString();
+  //   }
+  //   return res;
+  // }
 
   Future<String> updateProfilePic({
     required Uint8List file,
@@ -86,6 +86,27 @@ class AuthMethods {
           .collection('users')
           .doc(_auth.currentUser!.uid)
           .update({'profilePic': photoUrl});
+      UserProvider _userProvider = Provider.of(context, listen: false);
+      await _userProvider.refreshUser();
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> updatePhoneNo({
+    required String phoneNo,
+    required BuildContext context,
+  }) async {
+    String res = "some error occurred";
+    print('phone no in function ' +phoneNo);
+    print('_auth.currentUser!.uid');
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .update({'phone': phoneNo});
       UserProvider _userProvider = Provider.of(context, listen: false);
       await _userProvider.refreshUser();
       res = 'success';

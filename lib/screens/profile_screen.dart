@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/user_model.dart';
 import 'package:flutter_application_1/repository/auth_methods.dart';
 import 'package:flutter_application_1/screens/change_profile_screen.dart';
+import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:flutter_application_1/screens/registration_screen.dart';
 import 'package:flutter_application_1/utils/loader.dart';
 import 'package:flutter_application_1/utils/toast.dart';
@@ -316,6 +317,8 @@ class _profilesettingState extends State<profilesetting> {
                       //splashColor: Colors.greenAccent,
                       onPressed: () {
                         AuthMethods().signOut();
+                        Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (context) => loginscreen()));
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),

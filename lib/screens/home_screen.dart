@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/user_model.dart';
 import 'package:flutter_application_1/my_files/map.dart';
 import 'package:flutter_application_1/my_files/scraping.dart';
+import 'package:flutter_application_1/repository/auth_methods.dart';
 import 'package:flutter_application_1/screens/addprop_screen.dart';
 import 'package:flutter_application_1/screens/c1.dart';
 import 'package:flutter_application_1/screens/drawer.dart';
@@ -44,8 +45,8 @@ class _homescreenState extends State<homescreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final UserModel loggedinuser = Provider.of<UserProvider>(context).getUser;
+    print(loggedinuser.phone!.length.toString());
 
     return Scaffold(
       appBar: AppBar(

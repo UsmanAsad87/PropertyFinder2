@@ -64,7 +64,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                 const SizedBox(height: 16),
                 BuildMenuItem(
                   text: 'Admin Dashboard',
-                  icon: IconData(0xe1b1, fontFamily: 'MaterialIcons'),
+                  icon:const  IconData(0xe1b1, fontFamily: 'MaterialIcons'),
                   onClicked: () => selectedItem(context, 8),
                 ),
         ],
@@ -167,8 +167,8 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 7:
         AuthMethods().signOut();
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: (context) => loginscreen()));
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => loginscreen()));
         break;
       case 8:
         Navigator.of(context)

@@ -6,6 +6,7 @@ import 'package:flutter_application_1/my_files/map.dart';
 import 'package:flutter_application_1/my_files/practice.dart';
 import 'package:flutter_application_1/provider/user_provider.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:flutter_application_1/screens/photp_screen.dart';
 import 'package:flutter_application_1/screens/test.dart';
 import 'package:flutter_application_1/search_screen/search_screen.dart';
@@ -61,7 +62,7 @@ class MyApp extends StatelessWidget {
                     ),
                   );
                 }
-                return const test();
+                return const loginscreen();
               },
             ),
 

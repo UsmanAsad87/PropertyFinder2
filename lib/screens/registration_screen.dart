@@ -282,6 +282,8 @@ class _registrationscreenState extends State<registrationscreen> {
     usermodel.firstname = firstnameEditingController.text;
     usermodel.secondname = secondnameEditingController.text;
     usermodel.address = addressEditingController.text;
+    usermodel.phone='';
+    usermodel.profilePic='';
 
     await firebaseFirestore
         .collection("users")

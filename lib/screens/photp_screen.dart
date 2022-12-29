@@ -35,18 +35,28 @@ class _photpscreenState extends State<photpscreen> {
     });
 
     try {
-      final authCredential =
-          await _auth.signInWithCredential(phoneAuthCredential);
-      await AuthMethods().updatePhone(phone: phoneController.text);
 
-      setState(() {
-        showLoading = false;
-      });
-      
+      String res=await AuthMethods().updatePhoneNo(phoneNo: phoneController.text, context: context);
+      print(res);
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> homescreen()));
 
-      if(authCredential.user != null){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> homescreen()));
-      }
+
+      //This code is commented because it is make new account based on phoneno
+      // final authCredential =
+      //     await _auth.signInWithCredential(phoneAuthCredential);
+      // //await AuthMethods().updatePhone(phone: phoneController.text);
+      //
+      // setState(() {
+      //   showLoading = false;
+      // });
+      //
+      //
+      // if(authCredential.user != null){
+      //   print(phoneController.text);
+      //   String res=await AuthMethods().updatePhoneNo(phoneNo: phoneController.text, context: context);
+      //   print(res);
+      //   Navigator.push(context, MaterialPageRoute(builder: (context)=> homescreen()));
+      // }
 
     } on FirebaseAuthException catch (e) {
       setState(() {
