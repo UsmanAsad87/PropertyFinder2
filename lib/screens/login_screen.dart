@@ -1,7 +1,10 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/model/user_model.dart';
+import 'package:flutter_application_1/repository/auth_methods.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/registration_screen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -159,10 +162,22 @@ String? errorMessage;
   }
   void signIn(String email, String password) async {
     if(_formkey.currentState!.validate()){
-      await _auth.signInWithEmailAndPassword(email: email, password: password).then((uid) =>
-      {
-        Fluttertoast.showToast(msg: "Login Successful"),
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => homescreen())),
+      await _auth.signInWithEmailAndPassword(email: email, password: password).then((uid) async{
+        //This try block is checking if Admin has deleted the account or not if deleted then not go to homepage
+        try {
+
+          User currentUser = _auth.currentUser!;
+          DocumentSnapshot snap =
+          await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+          UserModel.fromMap(snap.data() as Map<String, dynamic>);
+        } catch (e) {
+          AuthMethods().signOut();
+          Fluttertoast.showToast(msg: "Account is deleted by Admin");
+          return;
+        }
+        Fluttertoast.showToast(msg: "Login Successful");
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => homescreen()));
+
       }).catchError((e)
       {
         Fluttertoast.showToast(msg: e!.message);
