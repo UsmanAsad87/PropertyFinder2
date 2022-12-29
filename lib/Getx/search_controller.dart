@@ -21,3 +21,10 @@ class SearchRepAdminController extends GetxController{
     searchText=text;
   }
 }
+
+class SearchUserAdminController extends GetxController{
+  var searchText=''.obs;
+  setString(var text){
+    searchText=text;
+  }
+}

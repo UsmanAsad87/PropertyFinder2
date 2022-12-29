@@ -14,6 +14,7 @@ import 'package:flutter_application_1/screens/profile_screen.dart';
 //import 'package:flutter_application_1/screens/registration_screen.dart';
 import 'package:flutter_application_1/search_screen/search_screen.dart';
 import 'package:flutter_application_1/screens/test.dart';
+import 'package:flutter_application_1/utils/constant.dart';
 import 'package:provider/provider.dart';
 
 import '../model/user_model.dart';
@@ -60,7 +61,7 @@ class NavigationDrawerWidget extends StatelessWidget {
                 icon: CupertinoIcons.home,
                 onClicked: () => selectedItem(context, 0),
               ),
-              if(user.email=='admin@admin.com')...[
+              if(user.email==kAdminEmail)...[
                 const SizedBox(height: 16),
                 BuildMenuItem(
                   text: 'Admin Dashboard',

@@ -35,12 +35,18 @@ class _homescreenState extends State<homescreen> {
   @override
   void initState() {
     addData();
+    print('usman ahone');
     super.initState();
   }
 
   addData() async {
     UserProvider _userProvider = Provider.of(context, listen: false);
     await _userProvider.refreshUser();
+    UserModel u=Provider.of<UserProvider>(context, listen: false).getUser;
+    if(u.email==null){
+      print('null');
+    }
+
   }
 
   @override

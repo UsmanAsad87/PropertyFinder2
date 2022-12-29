@@ -56,6 +56,22 @@ class AuthMethods {
     return res;
   }
 
+
+  Future<String> deleteUserByAdmin({
+    required UserModel userdata
+  }) async {
+    String res = "Some error occurred";
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userdata.uid).delete();
+      res = 'success';
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
   // Future<String> updatePhone({
   //   required String phone,
   // }) async {
@@ -85,6 +101,28 @@ class AuthMethods {
       await _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
+          .update({'profilePic': photoUrl});
+      UserProvider _userProvider = Provider.of(context, listen: false);
+      await _userProvider.refreshUser();
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+
+  Future<String> updateUsersProfilePic({
+    required Uint8List file,
+    required UserModel user,
+    required BuildContext context,
+  }) async {
+    String res = "some error occurred";
+    try {
+      String photoUrl = await StorageMethods().uploadImageToStorage('profilePics',file,false);
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
           .update({'profilePic': photoUrl});
       UserProvider _userProvider = Provider.of(context, listen: false);
       await _userProvider.refreshUser();

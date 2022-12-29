@@ -15,6 +15,7 @@ import 'package:flutter_application_1/screens/login_screen.dart';
 import 'package:flutter_application_1/screens/myprop_screen.dart';
 import 'package:flutter_application_1/screens/registration_screen.dart';
 import 'package:flutter_application_1/search_screen/search_screen.dart';
+import 'package:flutter_application_1/users_admin/all_users_search_screen.dart';
 import 'package:flutter_application_1/utils/loader.dart';
 import 'package:flutter_application_1/utils/title_with_more_btn.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,7 +62,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminSearchProperty()));
       },
           () {
-
+            Navigator.push(context, MaterialPageRoute(builder: (_)=> AllUsersSearchScreen()));
       },
           () {
             Navigator.push(context, MaterialPageRoute(builder: (_)=> AdminRepSearchProperty()));
