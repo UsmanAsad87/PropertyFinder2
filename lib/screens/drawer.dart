@@ -4,22 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/my_files/scraping.dart';
 import 'package:flutter_application_1/repository/auth_methods.dart';
-import 'package:flutter_application_1/screens/addprop_screen.dart';
-import 'package:flutter_application_1/screens/admin_dashboard.dart';
-import 'package:flutter_application_1/screens/contact_screen.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
-import 'package:flutter_application_1/screens/myprop_screen.dart';
-import 'package:flutter_application_1/screens/profile_screen.dart';
+import 'package:flutter_application_1/screens/add_property/addprop_screen.dart';
+import 'package:flutter_application_1/screens/admin_dashboad/admin_dashboard.dart';
+import 'package:flutter_application_1/screens/contact_screen/contact_screen.dart';
+import 'package:flutter_application_1/screens/home_screen/home_screen.dart';
+import 'package:flutter_application_1/screens/my_property/myprop_screen.dart';
+import 'package:flutter_application_1/screens/profile_screens/profile_screen.dart';
+import 'package:flutter_application_1/screens/search_screen/search_screen.dart';
 //import 'package:flutter/widgets.dart';
 //import 'package:flutter_application_1/screens/registration_screen.dart';
-import 'package:flutter_application_1/search_screen/search_screen.dart';
 import 'package:flutter_application_1/screens/test.dart';
 import 'package:flutter_application_1/utils/constant.dart';
 import 'package:provider/provider.dart';
 
 import '../model/user_model.dart';
 import '../provider/user_provider.dart';
-import 'login_screen.dart';
+import 'login_and_signup/login_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final Padding = EdgeInsets.symmetric(horizontal: 20);
@@ -103,7 +103,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               const SizedBox(height: 16),
               BuildMenuItem(
                 text: 'Scraping',
-                icon: CupertinoIcons.backward,
+                icon: CupertinoIcons.scribble,
                 onClicked: () => selectedItem(context, 6),
               ),
 
