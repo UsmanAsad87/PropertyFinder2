@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/search_screen/components/header_with_searchbox.dart';
+import 'package:flutter_application_1/screens/search_screen/components/adtile.dart';
+import 'package:flutter_application_1/screens/search_screen/components/header_with_searchbox.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../Getx/search_controller.dart';
-import '../search_screen/components/adtile.dart';
-import '../search_screen/search_screen.dart';
+import '../screens/search_screen/search_screen.dart';
 //for residential and commerciAL FIlter;
 class Practice extends StatefulWidget {
 static const routeName="practice";

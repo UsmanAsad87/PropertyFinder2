@@ -1,8 +1,8 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/login_screen.dart';
-import 'package:flutter_application_1/screens/registration_screen.dart';
+import 'package:flutter_application_1/screens/login_and_signup/login_screen.dart';
+import 'package:flutter_application_1/screens/login_and_signup/registration_screen.dart';
 
 class test extends StatefulWidget {
   const test({Key? key}) : super(key: key);

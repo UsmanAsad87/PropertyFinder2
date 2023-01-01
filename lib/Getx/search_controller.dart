@@ -8,6 +8,14 @@ class SearchController extends GetxController{
 }
 
 
+class SearchHomeController extends GetxController{
+  var searchText=''.obs;
+  setString(var text){
+    searchText=text;
+  }
+}
+
+
 class SearchAdminController extends GetxController{
   var searchText=''.obs;
   setString(var text){
