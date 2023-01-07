@@ -1,1 +1,1 @@
-const kAdminEmail='admin@admin.com';
+const kAdminEmail='info.pfadm@gmail.com';

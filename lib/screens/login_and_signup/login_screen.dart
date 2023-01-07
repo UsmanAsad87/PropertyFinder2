@@ -6,9 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/user_model.dart';
 import 'package:flutter_application_1/repository/auth_methods.dart';
 import 'package:flutter_application_1/screens/home_screen/home_screen.dart';
+import 'package:flutter_application_1/screens/login_and_signup/forget_screen.dart';
 import 'package:flutter_application_1/screens/login_and_signup/photp_screen.dart';
 import 'package:flutter_application_1/screens/login_and_signup/registration_screen.dart';
+import 'package:flutter_application_1/utils/loader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 // ignore: camel_case_types
 class loginscreen extends StatefulWidget {
@@ -23,6 +26,7 @@ class _loginscreenState extends State<loginscreen> {
 
 // form key
 final _formkey = GlobalKey<FormState>();
+bool _isLoading=false;
 
 //controller
 final TextEditingController emailcontroller = new TextEditingController();
@@ -103,9 +107,15 @@ String? errorMessage;
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
+          setState(() {
+            _isLoading=true;
+          });
             signIn(emailcontroller.text, passwordcontroller.text);
+          setState(() {
+            _isLoading=false;
+          });
           },
-        child: Text("Login",textAlign: TextAlign.center,style: TextStyle(
+        child: _isLoading?spinKit():Text("Login",textAlign: TextAlign.center,style: TextStyle(
           fontSize: 20,color: Colors.white, fontWeight: FontWeight.bold
         ),),
       ),
@@ -136,7 +146,18 @@ String? errorMessage;
                     emailfield,
                     SizedBox(height: 25),
                     passwordfield,
-                    SizedBox(height: 35),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassScreen()));
+                        },
+                        child: Text("Forget Password?",
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
                     loginbutton,
                     SizedBox(height: 15),
                     Row(
@@ -185,9 +206,12 @@ String? errorMessage;
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => homescreen()));
           }
         } catch (e) {
-          AuthMethods().signOut();
-          Fluttertoast.showToast(msg: "Account is deleted by Admin");
-          return;
+          if (mounted) {
+            print(e.toString());
+            AuthMethods().signOut();
+            Fluttertoast.showToast(msg: "Account is deleted by Admin");
+            return;
+          }
         }
 
       }).catchError((e)
