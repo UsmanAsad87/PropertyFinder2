@@ -19,7 +19,18 @@ class AuthMethods {
         await _firestore.collection('users').doc(currentUser.uid).get();
     return UserModel.fromMap(snap.data() as Map<String, dynamic>);
   }
-
+  Future<String> resetPassword({
+    required String email,
+  }) async {
+    String res = "some error occurred";
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+      res = 'success';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 
 
 
