@@ -71,7 +71,6 @@ class _homescreenState extends State<homescreen> {
     SubHeaderHomeWithSearchBox sObj =
         SubHeaderHomeWithSearchBox(size: MediaQuery.of(context).size);
     final UserModel loggedinuser = Provider.of<UserProvider>(context).getUser;
-    print(loggedinuser.phone!.length.toString());
 
     return Scaffold(
       appBar: AppBar(
