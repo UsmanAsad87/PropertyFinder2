@@ -35,11 +35,11 @@ class _photpscreenState extends State<photpscreen> {
     });
 
     try {
-
-      String res=await AuthMethods().updatePhoneNo(phoneNo: phoneController.text, context: context);
+      String res = await AuthMethods()
+          .updatePhoneNo(phoneNo: phoneController.text, context: context);
       print(res);
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> homescreen()));
-
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => homescreen()));
 
       //This code is commented because it is make new account based on phoneno
       // final authCredential =
@@ -57,7 +57,6 @@ class _photpscreenState extends State<photpscreen> {
       //   print(res);
       //   Navigator.push(context, MaterialPageRoute(builder: (context)=> homescreen()));
       // }
-
     } on FirebaseAuthException catch (e) {
       setState(() {
         showLoading = false;
@@ -68,7 +67,6 @@ class _photpscreenState extends State<photpscreen> {
   }
 
   getMobileFormWidget(context) {
-    
     return Column(
       children: [
         Spacer(),
@@ -86,40 +84,52 @@ class _photpscreenState extends State<photpscreen> {
         SizedBox(
           height: 16,
         ),
-        FlatButton(
-          onPressed: () async {
-            setState(() {
-              showLoading = true;
-            });
-
-            await _auth.verifyPhoneNumber(
-              phoneNumber: phoneController.text,
-              verificationCompleted: (phoneAuthCredential) async {
-                setState(() {
-                  showLoading = false;
-                });
-                signInWithPhoneAuthCredential(phoneAuthCredential);
-              },
-              verificationFailed: (verificationFailed) async {
-                setState(() {
-                  showLoading = false;
-                });
-                // _scaffoldKey.currentState?.showSnackBar(
-                //     SnackBar(content: Text(verificationFailed.message.toString())));
-              },
-              codeSent: (verificationId, resendingToken) async {
-                setState(() {
-                  showLoading = false;
-                  currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
-                  this.verificationId = verificationId;
-                });
-              },
-              codeAutoRetrievalTimeout: (verificationId) async {},
-            );
-          },
-          child: Text("SEND"),
+        Material(
+          elevation: 5,
+          borderRadius: BorderRadius.circular(30),
           color: Colors.blue,
-          textColor: Colors.white,
+          child: MaterialButton(
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            minWidth: MediaQuery.of(context).size.width,
+            onPressed: () async {
+              setState(() {
+                showLoading = true;
+              });
+
+              await _auth.verifyPhoneNumber(
+                phoneNumber: phoneController.text,
+                verificationCompleted: (phoneAuthCredential) async {
+                  setState(() {
+                    showLoading = false;
+                  });
+                  signInWithPhoneAuthCredential(phoneAuthCredential);
+                },
+                verificationFailed: (verificationFailed) async {
+                  setState(() {
+                    showLoading = false;
+                  });
+                  // _scaffoldKey.currentState?.showSnackBar(
+                  //     SnackBar(content: Text(verificationFailed.message.toString())));
+                },
+                codeSent: (verificationId, resendingToken) async {
+                  setState(() {
+                    showLoading = false;
+                    currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
+                    this.verificationId = verificationId;
+                  });
+                },
+                codeAutoRetrievalTimeout: (verificationId) async {},
+              );
+            },
+            child: Text(
+              "Send",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
         Spacer(),
       ],
@@ -143,17 +153,30 @@ class _photpscreenState extends State<photpscreen> {
         SizedBox(
           height: 16,
         ),
-        FlatButton(
-          onPressed: () async {
-            PhoneAuthCredential phoneAuthCredential =
-                PhoneAuthProvider.credential(
-                    verificationId: verificationId, smsCode: otpController.text);
-
-            signInWithPhoneAuthCredential(phoneAuthCredential);
-          },
-          child: Text("VERIFY"),
+        Material(
+          elevation: 5,
+          borderRadius: BorderRadius.circular(30),
           color: Colors.blue,
-          textColor: Colors.white,
+          child: MaterialButton(
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            minWidth: MediaQuery.of(context).size.width,
+            onPressed: () async {
+              PhoneAuthCredential phoneAuthCredential =
+                  PhoneAuthProvider.credential(
+                      verificationId: verificationId,
+                      smsCode: otpController.text);
+
+              signInWithPhoneAuthCredential(phoneAuthCredential);
+            },
+            child: Text(
+              "VERIFY",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
         Spacer(),
       ],
@@ -179,6 +202,4 @@ class _photpscreenState extends State<photpscreen> {
   }
   //
   // FlatButton({required Future<Null> Function() onPressed, required Text child, required MaterialColor color, required Color textColor}) {}
-
 }
-
